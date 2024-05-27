@@ -9,9 +9,7 @@ import (
 )
 
 const (
-	// All modules except for Gun (for now).
-	mobileModules = module.TypeConnection | module.TypeRobot |
-		module.TypeChassis | module.TypeGimbal | module.TypeCamera | module.TypeGamePad
+	mobileModules = module.TypeAll
 )
 
 // Client is the main entry point for the mobile SDK.
@@ -64,7 +62,8 @@ func (c *Client) Camera() *Camera {
 // Controller returns the Controller instance for the client.
 func (c *Client) Chassis() *Chassis {
 	return &Chassis{
-		c: c.c.Chassis(),
+		// Keeping compatibilitty after refactoring.
+		c: c.c.Controller(),
 	}
 }
 

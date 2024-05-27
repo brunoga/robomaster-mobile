@@ -1,8 +1,7 @@
 package mobile
 
 import (
-	"github.com/brunoga/robomaster/module/chassis"
-	"github.com/brunoga/robomaster/module/chassis/controller"
+	"github.com/brunoga/robomaster/module/controller"
 )
 
 // StickPosition represents the position of a stick controller.
@@ -41,7 +40,8 @@ func (s *StickPosition) InterpolatedY() int64 {
 // Chassis allows controlling the robot chassis. It also works as the robot main
 // controller interface.
 type Chassis struct {
-	c *chassis.Chassis
+	// Just keeping compatibility after refactoring.
+	c *controller.Controller
 }
 
 // Move moves the robot using the given stick positions. The left stick controls
