@@ -2,7 +2,7 @@ module github.com/brunoga/robomaster-mobile
 
 go 1.22.3
 
-require github.com/brunoga/robomaster v0.0.5
+require github.com/brunoga/robomaster v0.0.6
 
 require (
 	github.com/brunoga/timedsignalwaiter v1.0.0 // indirect
