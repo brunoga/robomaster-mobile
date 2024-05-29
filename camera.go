@@ -1,7 +1,7 @@
 package mobile
 
 import (
-	"github.com/brunoga/robomaster/unitybridge/support/token"
+	"github.com/brunoga/robomaster/support/token"
 
 	"github.com/brunoga/robomaster/module/camera"
 )
