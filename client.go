@@ -14,6 +14,7 @@ const (
 
 // Client is the main entry point for the mobile SDK.
 type Client struct {
+	l *logger.Logger
 	c *robomaster.Client
 }
 
@@ -22,13 +23,15 @@ type Client struct {
 // will only connect to a robot that is broadcasting the given appID. The appID
 // can be configured in the robot through a qrcode.
 func NewClient(appID int64) (*Client, error) {
-	l := logger.New(slog.LevelDebug)
+	l := logger.New(slog.LevelDebug, "mobile").WithGroup("mobile")
+
 	c, err := robomaster.NewWithModules(l, uint64(appID), mobileModules)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Client{
+		l: l,
 		c: c,
 	}, nil
 }
@@ -55,6 +58,7 @@ func (c *Client) Start() error {
 // Camera returns the Camera instance for the client.
 func (c *Client) Camera() *Camera {
 	return &Camera{
+		l: c.l,
 		c: c.c.Camera(),
 	}
 }
