@@ -2,10 +2,10 @@ module github.com/brunoga/robomaster-mobile
 
 go 1.22.3
 
-require github.com/brunoga/robomaster v0.0.7
+require github.com/brunoga/robomaster v0.0.8
 
 require (
-	github.com/brunoga/groupfilterhandler v0.0.0-20240529152547-549eb8e3c392 // indirect
+	github.com/brunoga/groupfilterhandler v0.0.1 // indirect
 	github.com/brunoga/timedsignalwaiter v1.0.0 // indirect
 	github.com/lmittmann/tint v1.0.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
