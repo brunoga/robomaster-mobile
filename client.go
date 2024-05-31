@@ -5,6 +5,7 @@ import (
 
 	"github.com/brunoga/robomaster"
 	"github.com/brunoga/robomaster/module"
+	"github.com/brunoga/robomaster/module/robot"
 	"github.com/brunoga/robomaster/support/logger"
 )
 
@@ -52,7 +53,14 @@ func NewWifiDirectClient() (*Client, error) {
 
 // Start starts the client.
 func (c *Client) Start() error {
-	return c.c.Start()
+	// Start underlying client.
+	err := c.c.Start()
+	if err != nil {
+		return err
+	}
+
+	// Enable movement control (i.e. controller.Move()).
+	return c.c.Robot().EnableFunction(robot.FunctionTypeMovementControl, true)
 }
 
 // Camera returns the Camera instance for the client.
