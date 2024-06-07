@@ -1,8 +1,6 @@
 package mobile
 
 import (
-	"log/slog"
-
 	"github.com/brunoga/robomaster"
 	"github.com/brunoga/robomaster/module"
 	"github.com/brunoga/robomaster/module/robot"
@@ -24,7 +22,7 @@ type Client struct {
 // will only connect to a robot that is broadcasting the given appID. The appID
 // can be configured in the robot through a qrcode.
 func NewClient(appID int64) (*Client, error) {
-	l := logger.New(slog.LevelDebug, "mobile").WithGroup("mobile")
+	l := logger.New(logger.LevelTrace)
 
 	c, err := robomaster.NewWithModules(l, uint64(appID), mobileModules)
 	if err != nil {
@@ -40,7 +38,8 @@ func NewClient(appID int64) (*Client, error) {
 // NewWifiDirectClient creates a new Client instance that will connect to a
 // Robomaster robot using Wifi Direct.
 func NewWifiDirectClient() (*Client, error) {
-	l := logger.New(slog.LevelDebug)
+	l := logger.New(logger.LevelTrace)
+
 	c, err := robomaster.NewWifiDirectWithModules(l, mobileModules)
 	if err != nil {
 		return nil, err
@@ -48,6 +47,7 @@ func NewWifiDirectClient() (*Client, error) {
 
 	return &Client{
 		c: c,
+		l: l,
 	}, nil
 }
 
@@ -66,7 +66,6 @@ func (c *Client) Start() error {
 // Camera returns the Camera instance for the client.
 func (c *Client) Camera() *Camera {
 	return &Camera{
-		l: c.l,
 		c: c.c.Camera(),
 	}
 }

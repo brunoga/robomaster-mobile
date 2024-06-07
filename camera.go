@@ -1,7 +1,6 @@
 package mobile
 
 import (
-	"github.com/brunoga/robomaster/support/logger"
 	"github.com/brunoga/robomaster/support/token"
 
 	"github.com/brunoga/robomaster/module/camera"
@@ -25,19 +24,21 @@ type VideoHandler interface {
 
 // Camera allows controlling the robot camera.
 type Camera struct {
-	l *logger.Logger
 	c *camera.Camera
 }
 
 // AddVideoHandler adds a new video handler to the camera. If this is the first
 // video handler added, the camera will start sending video frames.
 func (c *Camera) AddVideoHandler(handler VideoHandler) (token int64, err error) {
-	endTrace := c.l.Trace("AddVideoHandler", "handler", handler)
+	endTrace := c.c.Logger().Trace("AddVideoHandler", "handler", handler)
 	defer func() {
 		endTrace("token", token, "error", err)
 	}()
 
+	c.c.Logger().Debug("AddVideoHandler", "handler.handleVideo", handler.HandleVideo)
+
 	t, err := c.c.AddVideoCallback(func(frame *camera.RGB) {
+		c.c.Logger().Debug("AddVideoHandler: Got frame!")
 		handler.HandleVideo(frame.Pix)
 	})
 
@@ -47,7 +48,7 @@ func (c *Camera) AddVideoHandler(handler VideoHandler) (token int64, err error) 
 // RemoveVideoHandler removes a video handler from the camera. If this is the
 // last video handler removed, the camera will stop sending video frames.
 func (c *Camera) RemoveVideoHandler(t int64) (err error) {
-	endTrace := c.l.Trace("RemoveVideoHandler", "token", t)
+	endTrace := c.c.Logger().Trace("RemoveVideoHandler", "token", t)
 	defer func() {
 		endTrace("error", err)
 	}()
@@ -58,7 +59,7 @@ func (c *Camera) RemoveVideoHandler(t int64) (err error) {
 // StartRecordingVideo starts recording video from the camera to the robot's
 // SD card.
 func (c *Camera) StartRecordingVideo() (err error) {
-	endTrace := c.l.Trace("StartRecordingVideo")
+	endTrace := c.c.Logger().Trace("StartRecordingVideo")
 	defer func() {
 		endTrace("error", err)
 	}()
@@ -68,7 +69,7 @@ func (c *Camera) StartRecordingVideo() (err error) {
 
 // IsRecordingVideo returns true if the camera is currently recording video.
 func (c *Camera) IsRecordingVideo() (isRecording bool, err error) {
-	endTrace := c.l.Trace("IsRecordingVideo")
+	endTrace := c.c.Logger().Trace("IsRecordingVideo")
 	defer func() {
 		endTrace("isRecording", isRecording, "error", err)
 	}()
@@ -78,7 +79,7 @@ func (c *Camera) IsRecordingVideo() (isRecording bool, err error) {
 
 // RecordingTimeInSeconds returns the current recording time in seconds.
 func (c *Camera) RecordingTimeInSeconds() (recordingTime int64) {
-	endTrace := c.l.Trace("RecordingTimeInSeconds")
+	endTrace := c.c.Logger().Trace("RecordingTimeInSeconds")
 	defer func() {
 		endTrace("recordingTime", recordingTime)
 	}()
@@ -89,7 +90,7 @@ func (c *Camera) RecordingTimeInSeconds() (recordingTime int64) {
 // StopRecordingVideo stops recording video from the camera to the robot's SD
 // card.
 func (c *Camera) StopRecordingVideo() (err error) {
-	endTrace := c.l.Trace("StopRecordingVideo")
+	endTrace := c.c.Logger().Trace("StopRecordingVideo")
 	defer func() {
 		endTrace("error", err)
 	}()

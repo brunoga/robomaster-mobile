@@ -2,6 +2,8 @@ github.com/brunoga/groupfilterhandler v0.0.0-20240529152547-549eb8e3c392 h1:CUnC
 github.com/brunoga/groupfilterhandler v0.0.0-20240529152547-549eb8e3c392/go.mod h1:RqXgYZreDlnAe4UifRSYxSA94W+TbWTAwU6SfN9UeRo=
 github.com/brunoga/groupfilterhandler v0.0.1 h1:B6c9m+q8F6xwtpoOtRFVbrFhMhMgMIMeASrEjm4RwK8=
 github.com/brunoga/groupfilterhandler v0.0.1/go.mod h1:RqXgYZreDlnAe4UifRSYxSA94W+TbWTAwU6SfN9UeRo=
+github.com/brunoga/groupfilterhandler v0.0.2 h1:mPey0W93UaAz/kCUblWzOYekz5K+pteUrhxdhyzvMhM=
+github.com/brunoga/groupfilterhandler v0.0.2/go.mod h1:RqXgYZreDlnAe4UifRSYxSA94W+TbWTAwU6SfN9UeRo=
 github.com/brunoga/robomaster v0.0.1 h1:vq4B4ZlLCoO0tp3xSwNbk+Yji14JC2kNNFmoS3HGm0o=
 github.com/brunoga/robomaster v0.0.1/go.mod h1:Fy74p8EAdDvYIe20GEdU1tBG0TbwHTKVTPX2mSlACTQ=
 github.com/brunoga/robomaster v0.0.2 h1:8N3k4smmOa51xFmsLPGfLKQxGy0N8xFztI2rt8/TPpg=
