@@ -24,6 +24,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer func() {
+		err = c.Stop()
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	camera := c.Camera()
 
