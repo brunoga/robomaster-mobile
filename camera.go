@@ -13,47 +13,49 @@ const (
 	CameraVerticalFOVDegrees         = camera.VerticalFOVDegrees
 )
 
-// VideoHandler is the interface that must be implemented by types that want
-// to handle video frames from the camera.
-type VideoHandler interface {
-	// HandleVideo is called when a new video frame is received from the camera.
-	// rgb24Data, as the name name implies, is the raw data for a RGB24 image and
-	// its dimensions are 1280x720.
-	HandleVideo(rgb24Data []byte)
+type GLTextureData struct {
+	ID     int64
+	Width  int32
+	Height int32
 }
 
 // Camera allows controlling the robot camera.
 type Camera struct {
 	c *camera.Camera
+
+	t token.Token
 }
 
-// AddVideoHandler adds a new video handler to the camera. If this is the first
-// video handler added, the camera will start sending video frames.
-func (c *Camera) AddVideoHandler(handler VideoHandler) (token int64, err error) {
-	endTrace := c.c.Logger().Trace("AddVideoHandler", "handler", handler)
-	defer func() {
-		endTrace("token", token, "error", err)
-	}()
-
-	c.c.Logger().Debug("AddVideoHandler", "handler.handleVideo", handler.HandleVideo)
-
-	t, err := c.c.AddVideoCallback(func(frame *camera.RGB) {
-		c.c.Logger().Debug("AddVideoHandler: Got frame!")
-		handler.HandleVideo(frame.Pix)
-	})
-
-	return int64(t), err
-}
-
-// RemoveVideoHandler removes a video handler from the camera. If this is the
-// last video handler removed, the camera will stop sending video frames.
-func (c *Camera) RemoveVideoHandler(t int64) (err error) {
-	endTrace := c.c.Logger().Trace("RemoveVideoHandler", "token", t)
+// StartVideo starts the camera video stream.
+func (c *Camera) StartVideo() (err error) {
+	endTrace := c.c.Logger().Trace("StartVideo")
 	defer func() {
 		endTrace("error", err)
 	}()
 
-	return c.c.RemoveVideoCallback(token.Token(t))
+	t, err := c.c.AddVideoCallback(func(frame *camera.RGB) {
+		c.c.Logger().Error("AddVideoHandler: Unexpectedly got frame!")
+	})
+
+	if err != nil {
+		c.t = t
+	}
+
+	return err
+}
+
+// StopVideo stops the camera video stream.
+func (c *Camera) StopVideo() (err error) {
+	endTrace := c.c.Logger().Trace("StopVideo")
+	defer func() {
+		if err == nil {
+			c.t = 0
+		}
+
+		endTrace("error", err)
+	}()
+
+	return c.c.RemoveVideoCallback(c.t)
 }
 
 // StartRecordingVideo starts recording video from the camera to the robot's
@@ -96,4 +98,27 @@ func (c *Camera) StopRecordingVideo() (err error) {
 	}()
 
 	return c.c.StopRecordingVideo()
+}
+
+// RenderNextFrame requests the next frame to be rendered. This is used by iOS
+// and the frame will be rendered to a texture associated with an OpenGLES 2.0
+// context that was current when Start() is called. This should be called for
+// for each frame to be rendered (up to 60 times per second).
+func (c *Camera) RenderNextFrame() {
+	c.c.RenderNextFrame()
+}
+
+// GLTextureData returns information about the current texture used for
+// rendering frames. See RenderNextFrame() above.
+func (c *Camera) GLTextureData() (*GLTextureData, error) {
+	glTextureData, err := c.c.GLTextureData()
+	if err != nil {
+		return nil, err
+	}
+
+	return &GLTextureData{
+		ID:     int64(glTextureData.ID),
+		Width:  int32(glTextureData.Width),
+		Height: int32(glTextureData.Height),
+	}, nil
 }

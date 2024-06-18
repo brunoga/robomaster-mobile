@@ -33,15 +33,13 @@ func main() {
 
 	camera := c.Camera()
 
-	videoHandler := &VideoHandler{}
-
 	// Add a video handler.
-	t, err := camera.AddVideoHandler(videoHandler)
+	err = camera.StartVideo()
 	if err != nil {
 		panic(err)
 	}
 	defer func() {
-		err = camera.RemoveVideoHandler(t)
+		err = camera.StopVideo()
 		if err != nil {
 			panic(err)
 		}
