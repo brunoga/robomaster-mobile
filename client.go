@@ -1,6 +1,8 @@
 package mobile
 
 import (
+	"log/slog"
+
 	"github.com/brunoga/robomaster"
 	"github.com/brunoga/robomaster/module"
 	"github.com/brunoga/robomaster/module/robot"
@@ -22,7 +24,7 @@ type Client struct {
 // will only connect to a robot that is broadcasting the given appID. The appID
 // can be configured in the robot through a qrcode.
 func NewClient(appID int64) (*Client, error) {
-	l := logger.New(logger.LevelTrace)
+	l := logger.New(slog.LevelDebug)
 
 	c, err := robomaster.NewWithModules(l, uint64(appID), mobileModules)
 	if err != nil {
