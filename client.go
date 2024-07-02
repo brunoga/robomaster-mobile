@@ -102,6 +102,12 @@ func (c *Client) Robot() *Robot {
 	}
 }
 
+func (c *Client) SDCard() *SDCard {
+	return &SDCard{
+		m: c.c.SDCard(),
+	}
+}
+
 // Stop stops the client.
 func (c *Client) Stop() error {
 	return c.c.Stop()
