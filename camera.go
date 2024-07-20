@@ -21,7 +21,7 @@ type GLTextureData struct {
 
 // Camera allows controlling the robot camera.
 type Camera struct {
-	c *camera.Camera
+	c *camera.Module
 
 	t token.Token
 }
