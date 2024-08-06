@@ -25,5 +25,5 @@ func (r *Robot) ChassisSpeedLevel() (int8, error) {
 // SetChassisSpeedLevel sets the chassis speed level. Valid values are 0 (Fast),
 // 1 (Medium) and 2 (Slow).
 func (r *Robot) SetChassisSpeedLevel(speedLevel int8) error {
-	return r.r.SetChassisSpeedLevel(robot.ChassisSpeedLevelType(speedLevel))
+	return r.r.SetChassisSpeedLevel(robot.ChassisSpeedLevel(speedLevel))
 }
