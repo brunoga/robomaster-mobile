@@ -1,6 +1,8 @@
 package mobile
 
 import (
+	"fmt"
+
 	"github.com/brunoga/robomaster/support/token"
 
 	"github.com/brunoga/robomaster/module/camera"
@@ -98,6 +100,52 @@ func (c *Camera) StopRecordingVideo() (err error) {
 	}()
 
 	return c.c.StopRecordingVideo()
+}
+
+// SetVideoFormat sets the video format to be used by the camera. It most
+// likelly appplies to the video recording in the robot itself. Not sure if
+// all modes are supported byt they are:
+//
+//	0: 720p 30fps
+//	1: 1080p 30fps
+//	2: 720p 60fps
+//	3: 1080p 60fps
+func (c *Camera) SetVideoFormat(videoFormat int) error {
+	if videoFormat < 0 || videoFormat >= int(camera.VideoFormatCount) {
+		return fmt.Errorf("invalid video format: %d", videoFormat)
+	}
+
+	return c.c.SetVideoFormat(camera.VideoFormat(videoFormat))
+}
+
+// VideoFormat returns the current video format used by the camera. See
+// SetVideoFormat() above for the possible values.
+func (c *Camera) VideoFormat() (int, error) {
+	videoFormat, err := c.c.VideoFormat()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(videoFormat), nil
+}
+
+// SetDigitalZoomFactor sets the digital zoom factor to be used by the camera.
+func (c *Camera) SetDigitalZoomFactor(factor int64) error {
+	if factor < 1 {
+		return fmt.Errorf("invalid digital zoom factor: %d", factor)
+	}
+
+	return c.c.SetDigitalZoomFactor(uint64(factor))
+}
+
+// DigitalZoomFactor returns the current digital zoom factor used by the camera.
+func (c *Camera) DigitalZoomFactor() (int64, error) {
+	factor, err := c.c.DigitalZoomFactor()
+	if err != nil {
+		return 0, err
+	}
+
+	return int64(factor), nil
 }
 
 // RenderNextFrame requests the next frame to be rendered. This is used by iOS
